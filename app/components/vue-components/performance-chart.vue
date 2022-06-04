@@ -37,10 +37,15 @@ export default {
     VChart,
   },
   watch: {
+    startDate: {
+      handler(newVal) {
+        this.getDataBetweenDates(newVal, this.endDate);
+      },
+      deep: true,
+    },
     endDate: {
-      handler() {
-        const res = this.getDataBetweenDates()
-        this.getChartData = res;
+      handler(newVal) {
+        this.getDataBetweenDates(this.startDate, newVal);
       },
       deep: true,
     },
@@ -52,7 +57,8 @@ export default {
   data() {
     return {
       startDate: '2022-01-01',
-      endDate: '2022-01-12'
+      endDate: '2022-01-30',
+      originalData: this.getChartData,
     };
   },
 
@@ -169,20 +175,26 @@ export default {
         this.$store.commit("TeamPerformance/UPDATE_PERFORMANCE_CHART_DATA", val);
       },
     },
+    getOldChartData() {
+        return this.$store.getters["TeamPerformance/getOldChartData"];
+    }
   },
 
   methods: {
     formatDate(dateInMs) {
       return moment(dateInMs).format("DD MMM YYYY");
     },
-    getDataBetweenDates() {
-      const startDate = moment(this.startDate).format("YYYY-MM-DD");
-      const endDate = moment(this.endDate).format("YYYY-MM-DD");
-      return this.getChartData.filter(
+    getDataBetweenDates(startDate, endDate) {
+      const filteredArr =  this.getOldChartData.filter(
         (item) =>
           moment(item.date_ms).format("YYYY-MM-DD") >= startDate &&
           moment(item.date_ms).format("YYYY-MM-DD") <= endDate
       );
+      if(filteredArr.length > 0) {
+        this.getChartData = filteredArr;
+      }else{
+        this.getChartData = this.getOldChartData;
+      }
     },
   },
 };
