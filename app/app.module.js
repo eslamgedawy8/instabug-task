@@ -4,6 +4,7 @@ import 'ngVue/build/plugins.js';
 import PerformancePageComponent from './pages/performance-page.vue';
 import PerformanceChartComponent from './components/vue-components/performance-chart.vue';
 import salesFilterComponent from './components/vue-components/sales-filter.vue';
+import store from './store';
 
 angular.module('appModule', [
   'ui.router',
@@ -28,3 +29,9 @@ angular.module('appModule').filter('trust', ['$sce', function ($sce) {
     return $sce.trustAsHtml(htmlCode);
   };
 }]);
+angular.module('appModule')
+  .config(($ngVueProvider) => {
+    $ngVueProvider.setRootVueInstanceProps({
+      store: store,
+    });
+  });
