@@ -1,5 +1,9 @@
 <template>
   <div class="c-chart__container">
+    <label for="startDate">Start Date:</label>
+    <input type="date" v-model="startDate" id="startDate" />
+    <label for="endDate">End Date:</label>
+    <input type="date" v-model="endDate" id="endDate"/>
     <v-chart ref="chart" :option="chartOptions" />
   </div>
 </template>
@@ -32,12 +36,23 @@ export default {
   components: {
     VChart,
   },
+  watch: {
+    endDate: {
+      handler() {
+        const res = this.getDataBetweenDates()
+        this.getChartData = res;
+      },
+      deep: true,
+    },
+  },
   created() {
     this.$store.dispatch("TeamPerformance/GET_PERFORMANCE_CHART");
   },
 
   data() {
     return {
+      startDate: '2022-01-01',
+      endDate: '2022-01-12'
     };
   },
 
@@ -110,14 +125,28 @@ export default {
     yAxisData() {
       return this.getChartData.map((item) => +item.performance * 100);
     },
-    getChartData() {
-      return this.$store.getters["TeamPerformance/getPerformanceChartData"];
+    getChartData: {
+      get() {
+        return this.$store.getters["TeamPerformance/getPerformanceChartData"];
+      },
+      set(val) {
+        this.$store.commit("TeamPerformance/UPDATE_PERFORMANCE_CHART_DATA", val);
+      },
     },
   },
 
   methods: {
     formatDate(dateInMs) {
       return moment(dateInMs).format("DD MMM YYYY");
+    },
+    getDataBetweenDates() {
+      const startDate = moment(this.startDate).format("YYYY-MM-DD");
+      const endDate = moment(this.endDate).format("YYYY-MM-DD");
+      return this.getChartData.filter(
+        (item) =>
+          moment(item.date_ms).format("YYYY-MM-DD") >= startDate &&
+          moment(item.date_ms).format("YYYY-MM-DD") <= endDate
+      );
     },
   },
 };
