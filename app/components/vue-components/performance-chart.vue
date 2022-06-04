@@ -32,39 +32,12 @@ export default {
   components: {
     VChart,
   },
+  created() {
+    this.$store.dispatch("TeamPerformance/GET_PERFORMANCE_CHART");
+  },
 
   data() {
     return {
-      chartData: [
-        {
-          date_ms: 1641772800000,
-          performance: 0.2,
-        },
-        {
-          date_ms: 1641859200000,
-          performance: 0.33,
-        },
-        {
-          date_ms: 1641945600000,
-          performance: 0.53,
-        },
-        {
-          date_ms: 1642032000000,
-          performance: 0.31,
-        },
-        {
-          date_ms: 1642118400000,
-          performance: 0.65,
-        },
-        {
-          date_ms: 1642204800000,
-          performance: 0.88,
-        },
-        {
-          date_ms: 1642291200000,
-          performance: 0.07,
-        },
-      ],
     };
   },
 
@@ -131,11 +104,14 @@ export default {
     },
 
     xAxisData() {
-      return this.chartData.map((item) => this.formatDate(item.date_ms));
+      return this.getChartData.map((item) => this.formatDate(item.date_ms));
     },
 
     yAxisData() {
-      return this.chartData.map((item) => +item.performance * 100);
+      return this.getChartData.map((item) => +item.performance * 100);
+    },
+    getChartData() {
+      return this.$store.getters["TeamPerformance/getPerformanceChartData"];
     },
   },
 
