@@ -76,6 +76,21 @@ export default {
           confine: false,
           hideDelay: 0,
           padding: 0,
+          formatter: function (params) {
+            let res = "";
+            params.forEach(function (item) {
+              res += `<div style="padding: 10px; 
+              background-color: #16253F; color: #fff";>`;
+              res += `<div style="display: flex;
+              justify-content: center;">${item.axisValueLabel}</div>`;
+              res += `<div style="display: flex">`
+                res += `<div>${item.marker}</div>`;
+                res += `<div>Team Performance Index: ${item.data}%</div>`;
+              res += `<div>`
+              res += `</div>`;
+            });
+            return res;
+          },
         },
         grid: {
           left: "30px",
@@ -115,6 +130,27 @@ export default {
             },
           },
         ],
+        visualMap: {
+          top: 70,
+          right: 10,
+          pieces: [
+            {
+              gt: 0,
+              lte: 50,
+              color: "#F4674C",
+            },
+            {
+              gt: 50,
+              lte: 80,
+              color: '#FBDB10'
+            },
+            {
+              gt: 80,
+              lte: 100,
+              color: '#01984F'
+            }
+          ]
+        },
       };
     },
 
