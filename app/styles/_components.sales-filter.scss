@@ -1,0 +1,15 @@
+.highlight{
+    display: flex;
+    justify-content: center;
+    .highlight__clear-btn{
+        background-color: #0099ff;
+        color: #fff;
+        padding: 5px 10px;
+        margin-left: 7px;
+    }
+}
+
+.highlight__match{
+  background-color: yellow;
+}
+
