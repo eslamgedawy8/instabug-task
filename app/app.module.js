@@ -5,6 +5,7 @@ import PerformancePageComponent from './pages/performance-page.vue';
 import PerformanceChartComponent from './components/vue-components/performance-chart.vue';
 import salesFilterComponent from './components/vue-components/sales-filter.vue';
 import store from './store';
+import vNotFoundComponent from './components/vue-components/not-found.vue';
 
 angular.module('appModule', [
   'ui.router',
@@ -35,3 +36,7 @@ angular.module('appModule')
       store: store,
     });
   });
+
+angular.module('appModule').directive('vNotFound', (createVueComponent) => {
+  return createVueComponent(Vue.component('vNotFoundComponent', vNotFoundComponent));
+});
