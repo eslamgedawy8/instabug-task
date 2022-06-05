@@ -2,7 +2,7 @@ angular
   .module('appModule')
   .controller('homeController', homePageController);
 
-function homePageController(Employees) {
+function homePageController(Employees, $location) {
   const homePageVm = this;
   homePageVm.employees = [];
   homePageVm.filteredEmployee = [];
@@ -11,6 +11,10 @@ function homePageController(Employees) {
   homePageVm.handleHighlight = function (employees, str) {
     homePageVm.searchString = str;
     homePageVm.filteredEmployee = employees;
+    $location.search('filter', str);
+    if (!str) {
+      $location.search({});
+    }
   };
 
   activate();
